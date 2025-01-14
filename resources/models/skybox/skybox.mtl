@@ -2,3 +2,4 @@ newmtl skybox
 Kd 0.65 0.65 0.65
 Ka 0.65 0.65 0.65
 Ks 0.65 0.65 0.65
+map_Kd skybox3.png

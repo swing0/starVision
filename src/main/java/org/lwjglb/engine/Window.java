@@ -119,6 +119,10 @@ public class Window {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
             glfwSetWindowShouldClose(windowHandle, true); // We will detect this in the rendering loop
         }
+        if (key == GLFW_KEY_TAB && action == GLFW_RELEASE) {
+            System.out.println("改变天空盒");; // We will change the skyBox
+
+        }
     }
 
     public void pollEvents() {

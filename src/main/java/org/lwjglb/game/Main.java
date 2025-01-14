@@ -91,7 +91,7 @@ public class Main implements IAppLogic {
         scene.setSceneLights(sceneLights);
 
         SkyBox skyBox = new SkyBox("resources/models/skybox/skybox.obj", scene.getTextureCache(),
-                scene.getMaterialCache());
+                scene.getMaterialCache(),1);
         skyBox.getSkyBoxEntity().setScale(100);
         skyBox.getSkyBoxEntity().updateModelMatrix();
         scene.setSkyBox(skyBox);
