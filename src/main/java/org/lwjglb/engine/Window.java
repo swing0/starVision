@@ -4,6 +4,8 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryUtil;
 import org.tinylog.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -18,6 +20,10 @@ public class Window {
     private MouseInput mouseInput;
     private Callable<Void> resizeFunc;
     private int width;
+
+    // 用于存储按键的当前状态和上一次状态
+    private Map<Integer, Boolean> keyStates = new HashMap<>();
+
 
     public Window(String title, WindowOptions opts, Callable<Void> resizeFunc) {
         this.resizeFunc = resizeFunc;
@@ -119,10 +125,6 @@ public class Window {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE) {
             glfwSetWindowShouldClose(windowHandle, true); // We will detect this in the rendering loop
         }
-        if (key == GLFW_KEY_TAB && action == GLFW_RELEASE) {
-            System.out.println("改变天空盒");; // We will change the skyBox
-
-        }
     }
 
     public void pollEvents() {
@@ -145,6 +147,20 @@ public class Window {
 
     public boolean windowShouldClose() {
         return glfwWindowShouldClose(windowHandle);
+    }
+
+    public boolean isKeyClick(int keyCode) {
+        boolean currentState = isKeyPressed(keyCode);
+        boolean previousState = keyStates.getOrDefault(keyCode, false);
+
+        // 只有当按键从“未按下”变为“按下”时，才返回 true
+        if (currentState && !previousState) {
+            keyStates.put(keyCode, currentState);
+            return true;
+        }
+
+        keyStates.put(keyCode, currentState);
+        return false;
     }
 
     public static class WindowOptions {

@@ -21,6 +21,13 @@ public class TextureCache {
         return textureMap.computeIfAbsent(texturePath, Texture::new);
     }
 
+    public void removeTexture(String texturePath) {
+        Texture texture = textureMap.remove(texturePath);
+        if (texture != null) {
+            texture.cleanup(); // 清理纹理资源
+        }
+    }
+
     public Collection<Texture> getAll() {
         return textureMap.values();
     }

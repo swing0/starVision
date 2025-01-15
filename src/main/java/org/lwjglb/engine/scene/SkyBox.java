@@ -9,9 +9,10 @@ public class SkyBox {
     private Entity skyBoxEntity;
     private Model skyBoxModel;
     private int skyBoxNum;
+    private TextureCache textureCache;
 
-
-    public SkyBox(String skyBoxModelPath, TextureCache textureCache, MaterialCache materialCache, int skyBoxNum) {
+    public SkyBox(String skyBoxModelPath, TextureCache textureCache, MaterialCache materialCache) {
+        this.textureCache = textureCache; // 保存纹理缓存引用
         skyBoxModel = ModelLoader.loadModel("skybox-model", skyBoxModelPath, textureCache, materialCache, false);
         MeshData meshData = skyBoxModel.getMeshDataList().get(0);
         material = materialCache.getMaterial(meshData.getMaterialIdx());
@@ -29,7 +30,7 @@ public class SkyBox {
         this.skyBoxNum = skyBoxNum;
     }
 
-    public void cleanuo() {
+    public void cleanup() {
         mesh.cleanup();
     }
 
@@ -49,8 +50,30 @@ public class SkyBox {
         return skyBoxModel;
     }
 
-    public SkyBox changeTexture() {
-        return this;
-    }
+    public void changeTexture() {
+        String path = "resources/models/skybox/skybox1.png";
+        switch (skyBoxNum) {
+            case 1 -> {
+                path = "resources/models/skybox/skybox2.png";
+                skyBoxNum = 2;
+            }
+            case 2 -> {
+                path = "resources/models/skybox/skybox3.png";
+                skyBoxNum = 3;
+            }
+            case 3 -> {
+                path = "resources/models/skybox/skybox1.png";
+                skyBoxNum = 1;
+            }
+        }
 
+        // 清理旧的纹理
+        if (material.getTexturePath() != null) {
+            textureCache.removeTexture(material.getTexturePath());
+        }
+
+        // 设置新的纹理路径并加载新纹理
+        material.setTexturePath(path);
+        textureCache.createTexture(path);
+    }
 }

@@ -91,7 +91,7 @@ public class Main implements IAppLogic {
         scene.setSceneLights(sceneLights);
 
         SkyBox skyBox = new SkyBox("resources/models/skybox/skybox.obj", scene.getTextureCache(),
-                scene.getMaterialCache(),1);
+                scene.getMaterialCache());
         skyBox.getSkyBoxEntity().setScale(100);
         skyBox.getSkyBoxEntity().updateModelMatrix();
         scene.setSkyBox(skyBox);
@@ -133,11 +133,14 @@ public class Main implements IAppLogic {
                 lightAngle = 90;
             }
         }
+        if (window.isKeyClick(GLFW_KEY_TAB)) {
+            scene.getSkyBox().changeTexture();
+        }
 
         MouseInput mouseInput = window.getMouseInput();
         if (mouseInput.isRightButtonPressed()) {
             Vector2f displVec = mouseInput.getDisplVec();
-            camera.addRotation((float) Math.toRadians(-displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(-displVec.y * MOUSE_SENSITIVITY));
+            camera.addRotation((float) Math.toRadians(displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(displVec.y * MOUSE_SENSITIVITY));
         }
 
         SceneLights sceneLights = scene.getSceneLights();
