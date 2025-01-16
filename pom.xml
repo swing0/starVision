@@ -6,7 +6,7 @@
     <groupId>org.lwjglb</groupId>
     <artifactId>starVision</artifactId>
     <version>1.0</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
 
 
@@ -168,4 +168,46 @@
             </properties>
         </profile>
     </profiles>
+    <build>
+        <plugins>
+            <!-- Shade 插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>${main.class}</mainClass> <!-- 指定主类 -->
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-clean-plugin</artifactId>-->
+<!--                <version>3.3.2</version> &lt;!&ndash; 使用最新版本 &ndash;&gt;-->
+<!--                <configuration>-->
+<!--                    <excludeDefaultDirectories>true</excludeDefaultDirectories> &lt;!&ndash; 禁用默认的删除行为 &ndash;&gt;-->
+<!--                    <filesets>-->
+<!--                        <fileset>-->
+<!--                            <directory>target</directory> &lt;!&ndash; 指定 target 目录 &ndash;&gt;-->
+<!--                            <excludes>-->
+<!--                                <exclude>resources/**</exclude> &lt;!&ndash; 排除 resources 文件夹 &ndash;&gt;-->
+<!--                            </excludes>-->
+<!--                        </fileset>-->
+<!--                    </filesets>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+        </plugins>
+    </build>
 </project>

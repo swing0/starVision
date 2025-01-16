@@ -16,7 +16,6 @@ public class Main implements IAppLogic {
     private static final float MOVEMENT_SPEED = 0.005f;
 
     private AnimationData animationData1;
-    private AnimationData animationData2;
     private Entity cubeEntity1;
     private Entity cubeEntity2;
     private float lightAngle;
@@ -42,9 +41,18 @@ public class Main implements IAppLogic {
                 scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(terrainModel);
         Entity terrainEntity = new Entity("terrainEntity", terrainModelId);
-        terrainEntity.setScale(100.0f);
+        terrainEntity.setScale(500.0f);
         terrainEntity.updateModelMatrix();
         scene.addEntity(terrainEntity);
+
+        String villageHouseId = "villageHouse";
+        Model villageHouseModel = ModelLoader.loadModel(villageHouseId, "resources/models/terrain/villageHouse.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(villageHouseModel);
+        Entity villageHouseEntity = new Entity("villageHouseEntity", villageHouseId);
+        villageHouseEntity.setScale(0.01f);
+        villageHouseEntity.updateModelMatrix();
+        scene.addEntity(villageHouseEntity);
 
         String bobModelId = "bobModel";
         Model bobModel = ModelLoader.loadModel(bobModelId, "resources/models/bob/boblamp.md5mesh",
@@ -52,18 +60,11 @@ public class Main implements IAppLogic {
         scene.addModel(bobModel);
         Entity bobEntity = new Entity("bobEntity-1", bobModelId);
         bobEntity.setScale(0.05f);
+        bobEntity.setPosition(0, 0.3f, 0);
         bobEntity.updateModelMatrix();
         animationData1 = new AnimationData(bobModel.getAnimationList().get(0));
         bobEntity.setAnimationData(animationData1);
         scene.addEntity(bobEntity);
-
-        Entity bobEntity2 = new Entity("bobEntity-2", bobModelId);
-        bobEntity2.setPosition(2, 0, 0);
-        bobEntity2.setScale(0.025f);
-        bobEntity2.updateModelMatrix();
-        animationData2 = new AnimationData(bobModel.getAnimationList().get(0));
-        bobEntity2.setAnimationData(animationData2);
-        scene.addEntity(bobEntity2);
 
         Model cubeModel = ModelLoader.loadModel("cube-model", "resources/models/cube/cube.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
@@ -96,7 +97,7 @@ public class Main implements IAppLogic {
         skyBox.getSkyBoxEntity().updateModelMatrix();
         scene.setSkyBox(skyBox);
 
-        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.02f));
+        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.01f));
 
         Camera camera = scene.getCamera();
         camera.setPosition(-1.5f, 3.0f, 4.5f);
@@ -123,14 +124,14 @@ public class Main implements IAppLogic {
             camera.moveRight(move);
         }
         if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-            lightAngle -= 2.5f;
-            if (lightAngle < -90) {
-                lightAngle = -90;
+            lightAngle -= 0.25f;
+            if (lightAngle < -100) {
+                lightAngle = -100;
             }
         } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-            lightAngle += 2.5f;
-            if (lightAngle > 90) {
-                lightAngle = 90;
+            lightAngle += 0.25f;
+            if (lightAngle > 100) {
+                lightAngle = 100;
             }
         }
         if (window.isKeyClick(GLFW_KEY_TAB)) {
@@ -153,9 +154,6 @@ public class Main implements IAppLogic {
     @Override
     public void update(Window window, Scene scene, long diffTimeMillis) {
         animationData1.nextFrame();
-        if (diffTimeMillis % 2 == 0) {
-            animationData2.nextFrame();
-        }
 
         rotation += 1.5;
         if (rotation > 360) {
