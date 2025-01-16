@@ -9,7 +9,7 @@ public class TextureCache {
     private Map<String, Texture> textureMap;
 
     public TextureCache() {
-        textureMap = new HashMap<>();
+        textureMap = new LinkedHashMap<>(); // 使用 LinkedHashMap 来保持插入顺序
         textureMap.put(DEFAULT_TEXTURE, new Texture(DEFAULT_TEXTURE));
     }
 

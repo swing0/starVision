@@ -2,7 +2,7 @@
 
 newmtl mat_1_tex
 Kd 0.80000001192093 0.80000001192093 0.80000001192093
-map_Kd D:\sketchfab\SAdownload\SketchfabRipper1.96\downloads\village-house-upgrades\textures\diffuse.jpg
+map_Kd diffuse.jpg
 Ks 0.25 0.25 0.25
 Ns 46.439
 map_Ns 
@@ -10,7 +10,7 @@ illum 7
 
 newmtl mat_2_tex
 Kd 0.80000001192093 0.80000001192093 0.80000001192093
-map_Kd D:\sketchfab\SAdownload\SketchfabRipper1.96\downloads\village-house-upgrades\textures\diffuse.3.jpg
+map_Kd diffuse.3.jpg
 Ks 0.25 0.25 0.25
 Ns 46.439
 map_Ns 
@@ -18,7 +18,7 @@ illum 7
 
 newmtl mat_3_tex
 Kd 0.80000001192093 0.80000001192093 0.80000001192093
-map_Kd D:\sketchfab\SAdownload\SketchfabRipper1.96\downloads\village-house-upgrades\textures\diffuse.2.jpg
+map_Kd diffuse.2.jpg
 Ks 0.25 0.25 0.25
 Ns 46.439
 map_Ns 

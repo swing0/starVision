@@ -67,10 +67,6 @@ public class SkyBox {
             }
         }
 
-        // 清理旧的纹理
-        if (material.getTexturePath() != null) {
-            textureCache.removeTexture(material.getTexturePath());
-        }
 
         // 设置新的纹理路径并加载新纹理
         material.setTexturePath(path);
