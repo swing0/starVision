@@ -18,6 +18,7 @@ public class Main implements IAppLogic {
     private AnimationData animationData1;
     private Entity cubeEntity1;
     private Entity cubeEntity2;
+    private Entity moonEntity;
     private float lightAngle;
     private float rotation;
 
@@ -78,6 +79,12 @@ public class Main implements IAppLogic {
         cubeEntity2.setPosition(-2, 2, -1);
         cubeEntity2.updateModelMatrix();
         scene.addEntity(cubeEntity2);
+
+        Moon moon = new Moon("resources/models/moon/Moon_2K.obj",
+                scene.getTextureCache(),scene.getMaterialCache());
+        moonEntity = moon.getMoonEntity();
+        moonEntity.updateModelMatrix();
+        scene.setMoon(moon);
 
         render.setupData(scene);
 
