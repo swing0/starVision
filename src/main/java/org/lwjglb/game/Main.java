@@ -19,8 +19,10 @@ public class Main implements IAppLogic {
     private Entity cubeEntity1;
     private Entity cubeEntity2;
     private Entity moonEntity;
+    private Entity sunEntity;
     private float lightAngle;
     private float rotation;
+    private float timeSpeed;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -67,24 +69,42 @@ public class Main implements IAppLogic {
         bobEntity.setAnimationData(animationData1);
         scene.addEntity(bobEntity);
 
-        Model cubeModel = ModelLoader.loadModel("cube-model", "resources/models/cube/cube.obj",
+//        Model cubeModel = ModelLoader.loadModel("cube-model", "resources/models/cube/cube.obj",
+//                scene.getTextureCache(), scene.getMaterialCache(), false);
+//        scene.addModel(cubeModel);
+//        cubeEntity1 = new Entity("cube-entity-1", cubeModel.getId());
+//        cubeEntity1.setPosition(0, 2, -1);
+//        cubeEntity1.updateModelMatrix();
+//        scene.addEntity(cubeEntity1);
+//
+//        cubeEntity2 = new Entity("cube-entity-2", cubeModel.getId());
+//        cubeEntity2.setPosition(-2, 2, -1);
+//        cubeEntity2.updateModelMatrix();
+//        scene.addEntity(cubeEntity2);
+
+//        Moon moon = new Moon("resources/models/moon/Moon_2K.obj",
+//                scene.getTextureCache(),scene.getMaterialCache());
+//        moonEntity = moon.getMoonEntity();
+//        moonEntity.updateModelMatrix();
+//        scene.setMoon(moon);
+
+        Model moonModel = ModelLoader.loadModel("moon-model", "resources/models/moon/Moon_2K.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(cubeModel);
-        cubeEntity1 = new Entity("cube-entity-1", cubeModel.getId());
-        cubeEntity1.setPosition(0, 2, -1);
-        cubeEntity1.updateModelMatrix();
-        scene.addEntity(cubeEntity1);
-
-        cubeEntity2 = new Entity("cube-entity-2", cubeModel.getId());
-        cubeEntity2.setPosition(-2, 2, -1);
-        cubeEntity2.updateModelMatrix();
-        scene.addEntity(cubeEntity2);
-
-        Moon moon = new Moon("resources/models/moon/Moon_2K.obj",
-                scene.getTextureCache(),scene.getMaterialCache());
-        moonEntity = moon.getMoonEntity();
+        scene.addModel(moonModel);
+        moonEntity = new Entity("moon-entity", moonModel.getId());
+        moonEntity.setPosition(0, 40, -1);
+        moonEntity.setScale(1);
         moonEntity.updateModelMatrix();
-        scene.setMoon(moon);
+        scene.addEntity(moonEntity);
+
+        Model sunModel = ModelLoader.loadModel("sun-model", "resources/models/sun/sun.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(sunModel);
+        sunEntity = new Entity("sun-entity", sunModel.getId());
+        sunEntity.setPosition(0, 50, -50);
+        sunEntity.setScale(1);
+        sunEntity.updateModelMatrix();
+        scene.addEntity(sunEntity);
 
         render.setupData(scene);
 
@@ -111,6 +131,7 @@ public class Main implements IAppLogic {
         camera.addRotation((float) Math.toRadians(15.0f), (float) Math.toRadians(390.f));
 
         lightAngle = 45.001f;
+        timeSpeed = 0.5f;
     }
 
     @Override
@@ -130,17 +151,11 @@ public class Main implements IAppLogic {
         } else if (window.isKeyPressed(GLFW_KEY_D)) {
             camera.moveRight(move);
         }
-        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-            lightAngle -= 0.25f;
-            if (lightAngle < -100) {
-                lightAngle = -100;
-            }
-        } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-            lightAngle += 0.25f;
-            if (lightAngle > 100) {
-                lightAngle = 100;
-            }
-        }
+//        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
+//            lightAngle = (lightAngle - 0.25f) % 360;
+//        } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
+//            lightAngle = (lightAngle + 0.25f) % 360;
+//        }
         if (window.isKeyClick(GLFW_KEY_TAB)) {
             scene.getSkyBox().changeTexture();
         }
@@ -151,25 +166,29 @@ public class Main implements IAppLogic {
             camera.addRotation((float) Math.toRadians(displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(displVec.y * MOUSE_SENSITIVITY));
         }
 
-        SceneLights sceneLights = scene.getSceneLights();
-        DirLight dirLight = sceneLights.getDirLight();
-        double angRad = Math.toRadians(lightAngle);
-        dirLight.getDirection().z = (float) Math.sin(angRad);
-        dirLight.getDirection().y = (float) Math.cos(angRad);
     }
 
     @Override
     public void update(Window window, Scene scene, long diffTimeMillis) {
         animationData1.nextFrame();
 
-        rotation += 1.5;
-        if (rotation > 360) {
-            rotation = 0;
-        }
-        cubeEntity1.setRotation(1, 1, 1, (float) Math.toRadians(rotation));
-        cubeEntity1.updateModelMatrix();
+        lightAngle = (lightAngle + timeSpeed) % 360;
+        SceneLights sceneLights = scene.getSceneLights();
+        DirLight dirLight = sceneLights.getDirLight();
+        double angRad = Math.toRadians(lightAngle);
+        dirLight.getDirection().x = (float) Math.sin(angRad);
+        dirLight.getDirection().y = (float) Math.cos(angRad);
+        dirLight.getDirection().z = (float) Math.cos(angRad);
 
-        cubeEntity2.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
-        cubeEntity2.updateModelMatrix();
+
+//        rotation += 1.5;
+//        if (rotation > 360) {
+//            rotation = 0;
+//        }
+//        cubeEntity1.setRotation(1, 1, 1, (float) Math.toRadians(rotation));
+//        cubeEntity1.updateModelMatrix();
+//
+//        cubeEntity2.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
+//        cubeEntity2.updateModelMatrix();
     }
 }
