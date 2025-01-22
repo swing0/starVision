@@ -20,9 +20,11 @@ public class Main implements IAppLogic {
     private Entity cubeEntity2;
     private Entity moonEntity;
     private Entity sunEntity;
+    private Entity marsEntity;
     private float lightAngle;
     private float rotation;
     private float timeSpeed;
+    private float scopeNum = 60.0f;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -106,6 +108,9 @@ public class Main implements IAppLogic {
         sunEntity.updateModelMatrix();
         scene.addEntity(sunEntity);
 
+        marsEntity = setPlanets("mars","resources/models/planet/Mars.obj",scene,10,10,3,1);
+        scene.addEntity(marsEntity);
+
         render.setupData(scene);
 
         SceneLights sceneLights = new SceneLights();
@@ -159,6 +164,21 @@ public class Main implements IAppLogic {
         if (window.isKeyClick(GLFW_KEY_TAB)) {
             scene.getSkyBox().changeTexture();
         }
+        //按PAGE_UP与PAGE_DOWN实现望远镜效果
+        if (window.isKeyClick(GLFW_KEY_PAGE_UP) && scopeNum > 10.0f){
+            scopeNum -= 10.0f;
+            float newFov = (float) Math.toRadians(scopeNum);
+            scene.getCamera().setFov(newFov);
+            scene.getProjection().setFov(newFov);
+            scene.getProjection().updateProjMatrix(window.getWidth(), window.getHeight());
+        }
+        if (window.isKeyClick(GLFW_KEY_PAGE_DOWN) && scopeNum < 90.0f){
+            scopeNum += 10.0f;
+            float newFov = (float) Math.toRadians(scopeNum);
+            scene.getCamera().setFov(newFov);
+            scene.getProjection().setFov(newFov);
+            scene.getProjection().updateProjMatrix(window.getWidth(), window.getHeight());
+        }
 
         MouseInput mouseInput = window.getMouseInput();
         if (mouseInput.isRightButtonPressed()) {
@@ -190,5 +210,18 @@ public class Main implements IAppLogic {
 //
 //        cubeEntity2.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
 //        cubeEntity2.updateModelMatrix();
+    }
+
+
+    private Entity setPlanets(String name,String modelPath,Scene scene,float x, float y, float z, float scale){
+        String id = name + "-model";
+        String entityId = name + "-entity";
+        Model model = ModelLoader.loadModel(id,modelPath,scene.getTextureCache(),scene.getMaterialCache(),false);
+        scene.addModel(model);
+        Entity entity = new Entity(entityId,model.getId());
+        entity.setPosition(x,y,z);
+        entity.setScale(scale);
+        entity.updateModelMatrix();
+        return entity;
     }
 }

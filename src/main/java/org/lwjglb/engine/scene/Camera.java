@@ -2,6 +2,8 @@ package org.lwjglb.engine.scene;
 
 import org.joml.*;
 
+import java.lang.Math;
+
 public class Camera {
 
     private Vector3f direction;
@@ -11,6 +13,7 @@ public class Camera {
     private Vector2f rotation;
     private Vector3f up;
     private Matrix4f viewMatrix;
+    private float fov;
 
     public Camera() {
         direction = new Vector3f();
@@ -20,6 +23,7 @@ public class Camera {
         viewMatrix = new Matrix4f();
         invViewMatrix = new Matrix4f();
         rotation = new Vector2f();
+        fov = (float) Math.toRadians(60.0f); // 默认FOV
     }
 
     public void addRotation(float x, float y) {
@@ -91,5 +95,13 @@ public class Camera {
     public void setRotation(float x, float y) {
         rotation.set(x, y);
         recalculate();
+    }
+
+    public void setFov(float fov) {
+        this.fov = fov;
+    }
+
+    public float getFov() {
+        return fov;
     }
 }
