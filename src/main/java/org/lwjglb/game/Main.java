@@ -14,6 +14,7 @@ public class Main implements IAppLogic {
 
     private static final float MOUSE_SENSITIVITY = 0.1f;
     private static final float MOVEMENT_SPEED = 0.005f;
+    private static final float TIME_DEFAULT_SPEED = 1 * 0.01f;
 
     private AnimationData animationData1;
     private Entity cubeEntity1;
@@ -21,6 +22,7 @@ public class Main implements IAppLogic {
     private Entity moonEntity;
     private Entity sunEntity;
     private Entity marsEntity;
+    private Entity skyBoxEntity;
     private float lightAngle;
     private float rotation;
     private float timeSpeed;
@@ -128,6 +130,7 @@ public class Main implements IAppLogic {
         skyBox.getSkyBoxEntity().setScale(100);
         skyBox.getSkyBoxEntity().updateModelMatrix();
         scene.setSkyBox(skyBox);
+        skyBoxEntity = skyBox.getSkyBoxEntity();
 
         scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.01f));
 
@@ -136,7 +139,7 @@ public class Main implements IAppLogic {
         camera.addRotation((float) Math.toRadians(15.0f), (float) Math.toRadians(390.f));
 
         lightAngle = 45.001f;
-        timeSpeed = 0.5f;
+        timeSpeed = TIME_DEFAULT_SPEED;
     }
 
     @Override
@@ -156,11 +159,14 @@ public class Main implements IAppLogic {
         } else if (window.isKeyPressed(GLFW_KEY_D)) {
             camera.moveRight(move);
         }
-//        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-//            lightAngle = (lightAngle - 0.25f) % 360;
-//        } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-//            lightAngle = (lightAngle + 0.25f) % 360;
-//        }
+        if (window.isKeyPressed(GLFW_KEY_LEFT)) {
+            timeSpeed = timeSpeed - 0.1f;
+        } else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
+            timeSpeed = timeSpeed + 0.1f;
+        }
+        if (window.isKeyClick(GLFW_KEY_0)){
+            timeSpeed = TIME_DEFAULT_SPEED;
+        }
         if (window.isKeyClick(GLFW_KEY_TAB)) {
             scene.getSkyBox().changeTexture();
         }
@@ -201,15 +207,17 @@ public class Main implements IAppLogic {
         dirLight.getDirection().z = (float) Math.cos(angRad);
 
 
-//        rotation += 1.5;
-//        if (rotation > 360) {
-//            rotation = 0;
-//        }
+        rotation += timeSpeed;
+        if (rotation > 360) {
+            rotation = 0;
+        }
 //        cubeEntity1.setRotation(1, 1, 1, (float) Math.toRadians(rotation));
 //        cubeEntity1.updateModelMatrix();
 //
 //        cubeEntity2.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
 //        cubeEntity2.updateModelMatrix();
+        skyBoxEntity.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
+        skyBoxEntity.updateModelMatrix();
     }
 
 
