@@ -11,7 +11,7 @@ public class Entity {
     private Vector3f position;
     private Quaternionf rotation;
     private float scale;
-
+    private boolean haveShadow = true;
     public Entity(String id, String modelId) {
         this.id = id;
         this.modelId = modelId;
@@ -69,5 +69,13 @@ public class Entity {
 
     public void updateModelMatrix() {
         modelMatrix.translationRotateScale(position, rotation, scale);
+    }
+
+    public boolean isHaveShadow() {
+        return haveShadow;
+    }
+
+    public void setHaveShadow(boolean haveShadow) {
+        this.haveShadow = haveShadow;
     }
 }

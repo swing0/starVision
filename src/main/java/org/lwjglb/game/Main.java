@@ -86,11 +86,6 @@ public class Main implements IAppLogic {
 //        cubeEntity2.updateModelMatrix();
 //        scene.addEntity(cubeEntity2);
 
-//        Moon moon = new Moon("resources/models/moon/Moon_2K.obj",
-//                scene.getTextureCache(),scene.getMaterialCache());
-//        moonEntity = moon.getMoonEntity();
-//        moonEntity.updateModelMatrix();
-//        scene.setMoon(moon);
 
         Model moonModel = ModelLoader.loadModel("moon-model", "resources/models/moon/Moon_2K.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
@@ -107,6 +102,7 @@ public class Main implements IAppLogic {
         sunEntity = new Entity("sun-entity", sunModel.getId());
         sunEntity.setPosition(0, 50, -50);
         sunEntity.setScale(1);
+        sunEntity.setHaveShadow(false);
         sunEntity.updateModelMatrix();
         scene.addEntity(sunEntity);
 

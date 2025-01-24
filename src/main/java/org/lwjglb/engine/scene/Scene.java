@@ -16,7 +16,6 @@ public class Scene {
     private Projection projection;
     private SceneLights sceneLights;
     private SkyBox skyBox;
-    private Moon moon;
     private TextureCache textureCache;
 
     public Scene(int width, int height) {
@@ -98,11 +97,4 @@ public class Scene {
         this.skyBox = skyBox;
     }
 
-    public Moon getMoon() {
-        return moon;
-    }
-
-    public void setMoon(Moon moon) {
-        this.moon = moon;
-    }
 }

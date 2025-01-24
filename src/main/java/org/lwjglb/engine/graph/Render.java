@@ -18,7 +18,6 @@ public class Render {
     private SceneRender sceneRender;
     private ShadowRender shadowRender;
     private SkyBoxRender skyBoxRender;
-    private MoonRender moonRender;
 
     public Render(Window window) {
         GL.createCapabilities();
@@ -32,7 +31,6 @@ public class Render {
         sceneRender = new SceneRender();
         guiRender = new GuiRender(window);
         skyBoxRender = new SkyBoxRender();
-        moonRender = new MoonRender();
         shadowRender = new ShadowRender();
         lightsRender = new LightsRender();
         animationRender = new AnimationRender();
@@ -44,7 +42,6 @@ public class Render {
         sceneRender.cleanup();
         guiRender.cleanup();
         skyBoxRender.cleanup();
-        moonRender.cleanup();
         shadowRender.cleanup();
         lightsRender.cleanup();
         animationRender.cleanup();
@@ -75,7 +72,6 @@ public class Render {
         lightRenderStart(window);
         lightsRender.render(scene, shadowRender, gBuffer);
         skyBoxRender.render(scene);
-        moonRender.render(scene);
         lightRenderFinish();
         guiRender.render(scene);
     }
