@@ -80,7 +80,6 @@ public class ShadowRender {
             List<Entity> entities = model.getEntitiesList();
             for (Entity entity : entities) {
                 if (!entity.isHaveShadow()){
-                    System.out.println(entity.getId() + "false");
                     continue;
                 }
                 uniformsMap.setUniform("modelMatrices[" + entityIdx + "]", entity.getModelMatrix());
