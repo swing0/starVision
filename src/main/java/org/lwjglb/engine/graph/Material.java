@@ -8,6 +8,7 @@ public class Material {
 
     private Vector4f ambientColor;
     private Vector4f diffuseColor;
+    private Vector4f emissiveColor; // 新增自发光颜色
     private int materialIdx;
     private String normalMapPath;
     private float reflectance;
@@ -18,6 +19,7 @@ public class Material {
         diffuseColor = DEFAULT_COLOR;
         ambientColor = DEFAULT_COLOR;
         specularColor = DEFAULT_COLOR;
+        emissiveColor = DEFAULT_COLOR;
         materialIdx = 0;
     }
 
@@ -75,5 +77,12 @@ public class Material {
 
     public void setTexturePath(String texturePath) {
         this.texturePath = texturePath;
+    }
+    public Vector4f getEmissiveColor() {
+        return emissiveColor;
+    }
+
+    public void setEmissiveColor(Vector4f emissiveColor) {
+        this.emissiveColor = emissiveColor;
     }
 }

@@ -16,6 +16,7 @@ public class Scene {
     private Projection projection;
     private SceneLights sceneLights;
     private SkyBox skyBox;
+    private Sun sun;
     private TextureCache textureCache;
 
     public Scene(int width, int height) {
@@ -71,6 +72,14 @@ public class Scene {
 
     public SkyBox getSkyBox() {
         return skyBox;
+    }
+
+    public Sun getSun() {
+        return sun;
+    }
+
+    public void setSun(Sun sun) {
+        this.sun = sun;
     }
 
     public TextureCache getTextureCache() {

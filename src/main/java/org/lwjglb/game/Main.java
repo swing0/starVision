@@ -73,19 +73,6 @@ public class Main implements IAppLogic {
         bobEntity.setAnimationData(animationData1);
         scene.addEntity(bobEntity);
 
-//        Model cubeModel = ModelLoader.loadModel("cube-model", "resources/models/cube/cube.obj",
-//                scene.getTextureCache(), scene.getMaterialCache(), false);
-//        scene.addModel(cubeModel);
-//        cubeEntity1 = new Entity("cube-entity-1", cubeModel.getId());
-//        cubeEntity1.setPosition(0, 2, -1);
-//        cubeEntity1.updateModelMatrix();
-//        scene.addEntity(cubeEntity1);
-//
-//        cubeEntity2 = new Entity("cube-entity-2", cubeModel.getId());
-//        cubeEntity2.setPosition(-2, 2, -1);
-//        cubeEntity2.updateModelMatrix();
-//        scene.addEntity(cubeEntity2);
-
 
         Model moonModel = ModelLoader.loadModel("moon-model", "resources/models/moon/Moon_2K.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
@@ -96,15 +83,6 @@ public class Main implements IAppLogic {
         moonEntity.updateModelMatrix();
         scene.addEntity(moonEntity);
 
-        Model sunModel = ModelLoader.loadModel("sun-model", "resources/models/sun/sun.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(sunModel);
-        sunEntity = new Entity("sun-entity", sunModel.getId());
-        sunEntity.setPosition(0, 50, -50);
-        sunEntity.setScale(1);
-        sunEntity.setHaveShadow(false);
-        sunEntity.updateModelMatrix();
-        scene.addEntity(sunEntity);
 
         marsEntity = setPlanets("mars","resources/models/planet/Mars.obj",scene,10,10,3,1);
         scene.addEntity(marsEntity);
@@ -127,6 +105,14 @@ public class Main implements IAppLogic {
         skyBox.getSkyBoxEntity().updateModelMatrix();
         scene.setSkyBox(skyBox);
         skyBoxEntity = skyBox.getSkyBoxEntity();
+
+        Sun sun = new Sun("resources/models/sun/sun.obj", scene.getTextureCache(),
+                scene.getMaterialCache());
+        scene.setSun(sun);
+        sunEntity = sun.getSunEntity();
+        sunEntity.setPosition(0, 100, -50);
+        sunEntity.setScale(1);
+        sunEntity.updateModelMatrix(); // 更新模型矩阵
 
         scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.01f));
 
@@ -207,11 +193,12 @@ public class Main implements IAppLogic {
         if (rotation > 360) {
             rotation = 0;
         }
-//        cubeEntity1.setRotation(1, 1, 1, (float) Math.toRadians(rotation));
-//        cubeEntity1.updateModelMatrix();
-//
-//        cubeEntity2.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
-//        cubeEntity2.updateModelMatrix();
+        sunEntity.setRotation(1, 1, 1, (float) Math.toRadians(rotation)); // 设置旋转
+        sunEntity.updateModelMatrix();
+        moonEntity.setRotation(1, 1, 1, (float) Math.toRadians(rotation)); // 设置旋转
+        moonEntity.updateModelMatrix();
+        marsEntity.setRotation(1, 1, 1, (float) Math.toRadians(rotation));
+        marsEntity.updateModelMatrix();
         skyBoxEntity.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
         skyBoxEntity.updateModelMatrix();
     }
