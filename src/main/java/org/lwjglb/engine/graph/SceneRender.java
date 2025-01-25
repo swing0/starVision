@@ -14,8 +14,8 @@ public class SceneRender {
     public static final int MAX_DRAW_ELEMENTS = 100;
     public static final int MAX_ENTITIES = 50;
     private static final int COMMAND_SIZE = 5 * 4;
-    private static final int MAX_MATERIALS = 20;
-    private static final int MAX_TEXTURES = 16;
+    private static final int MAX_MATERIALS = 50;
+    private static final int MAX_TEXTURES = 30;
     private int animDrawCount;
     private int animRenderBufferHandle;
     private Map<String, Integer> entitiesIdxMap;
@@ -83,7 +83,7 @@ public class SceneRender {
         List<Texture> textures = textureCache.getAll().stream().toList();
         int numTextures = textures.size();
         if (numTextures > MAX_TEXTURES) {
-            //Logger.warn("Only " + MAX_TEXTURES + " textures can be used"); TODO
+            Logger.warn("Only " + MAX_TEXTURES + " textures can be used"); //TODO
         }
         for (int i = 0; i < Math.min(MAX_TEXTURES, numTextures); i++) {
             uniformsMap.setUniform("txtSampler[" + i + "]", i);
@@ -204,7 +204,7 @@ public class SceneRender {
         List<Texture> textures = textureCache.getAll().stream().toList();
         int numTextures = textures.size();
         if (numTextures > MAX_TEXTURES) {
-            //Logger.warn("Only " + MAX_TEXTURES + " textures can be used"); TODO
+            Logger.warn("Only " + MAX_TEXTURES + " textures can be used");
         }
         Map<String, Integer> texturePosMap = new HashMap<>();
         for (int i = 0; i < Math.min(MAX_TEXTURES, numTextures); i++) {

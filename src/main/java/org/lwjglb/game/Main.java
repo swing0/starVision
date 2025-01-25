@@ -19,9 +19,15 @@ public class Main implements IAppLogic {
     private AnimationData animationData1;
     private Entity cubeEntity1;
     private Entity cubeEntity2;
-    private Entity moonEntity;
     private Entity sunEntity;
+    private Entity moonEntity;
+    private Entity mercuryEntity;
+    private Entity venusEntity;
     private Entity marsEntity;
+    private Entity jupiterEntity;
+    private Entity saturnEntity;
+    private Entity uranusEntity;
+    private Entity neptuneEntity;
     private Entity skyBoxEntity;
     private float lightAngle;
     private float rotation;
@@ -73,19 +79,37 @@ public class Main implements IAppLogic {
         bobEntity.setAnimationData(animationData1);
         scene.addEntity(bobEntity);
 
+        Sun sun = new Sun("resources/models/sun/sun.obj", scene.getTextureCache(),
+                scene.getMaterialCache());
+        scene.setSun(sun);
+        sunEntity = sun.getSunEntity();
+        sunEntity.setPosition(0, 100, -50);
+        sunEntity.setScale(1.0f);
+        sunEntity.updateModelMatrix();
 
         Model moonModel = ModelLoader.loadModel("moon-model", "resources/models/moon/Moon_2K.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(moonModel);
         moonEntity = new Entity("moon-entity", moonModel.getId());
         moonEntity.setPosition(0, 40, -1);
-        moonEntity.setScale(1);
+        moonEntity.setScale(0.5f);
         moonEntity.updateModelMatrix();
         scene.addEntity(moonEntity);
 
-
-        marsEntity = setPlanets("mars","resources/models/planet/Mars.obj",scene,10,10,3,1);
+        mercuryEntity = setPlanets("mercury","resources/models/planet/Mercury.obj",scene,-10,10,3,0.5f);
+        scene.addEntity(mercuryEntity);
+        venusEntity = setPlanets("venus","resources/models/planet/Venus.obj",scene,-10,20,30,0.8f);
+        scene.addEntity(venusEntity);
+        marsEntity = setPlanets("mars","resources/models/planet/Mars.obj",scene,10,10,3,0.6f);
         scene.addEntity(marsEntity);
+        jupiterEntity = setPlanets("jupiter","resources/models/planet/Jupiter.obj",scene,18,50,50,1.2f);
+        scene.addEntity(jupiterEntity);
+        saturnEntity = setPlanets("saturn","resources/models/planet/Saturn.obj",scene,38,60,20,1.0f);
+        scene.addEntity(saturnEntity);
+        uranusEntity = setPlanets("uranus","resources/models/planet/Uranus.obj",scene,50,70,25,0.9f);
+        scene.addEntity(uranusEntity);
+        neptuneEntity = setPlanets("neptune","resources/models/planet/Neptune.obj",scene,58,80,50,0.9f);
+        scene.addEntity(neptuneEntity);
 
         render.setupData(scene);
 
@@ -106,15 +130,8 @@ public class Main implements IAppLogic {
         scene.setSkyBox(skyBox);
         skyBoxEntity = skyBox.getSkyBoxEntity();
 
-        Sun sun = new Sun("resources/models/sun/sun.obj", scene.getTextureCache(),
-                scene.getMaterialCache());
-        scene.setSun(sun);
-        sunEntity = sun.getSunEntity();
-        sunEntity.setPosition(0, 100, -50);
-        sunEntity.setScale(1);
-        sunEntity.updateModelMatrix(); // 更新模型矩阵
 
-        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.01f));
+//        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.01f));
 
         Camera camera = scene.getCamera();
         camera.setPosition(-1.5f, 3.0f, 4.5f);
@@ -193,12 +210,61 @@ public class Main implements IAppLogic {
         if (rotation > 360) {
             rotation = 0;
         }
-        sunEntity.setRotation(1, 1, 1, (float) Math.toRadians(rotation)); // 设置旋转
+
+        // 太阳运动（每天从东方升起，西方落下）
+        float sunX = (float) Math.sin(Math.toRadians(rotation)) * 100; // 水平运动
+        float sunY = (float) Math.cos(Math.toRadians(rotation)) * 50 + 50; // 垂直运动（模拟高度角）
+        sunEntity.setPosition(sunX, sunY, -50); // 更新太阳位置
         sunEntity.updateModelMatrix();
-        moonEntity.setRotation(1, 1, 1, (float) Math.toRadians(rotation)); // 设置旋转
+
+        // 月亮运动（每天从东方升起，西方落下，相位变化）
+        float moonX = (float) Math.sin(Math.toRadians(rotation + 180)) * 80; // 水平运动（与太阳相反）
+        float moonY = (float) Math.cos(Math.toRadians(rotation + 180)) * 40 + 40; // 垂直运动
+        moonEntity.setPosition(moonX, moonY, -1); // 更新月亮位置
         moonEntity.updateModelMatrix();
-        marsEntity.setRotation(1, 1, 1, (float) Math.toRadians(rotation));
+
+        // 水星运动（缓慢移动）
+        float mercuryX = (float) Math.sin(Math.toRadians(rotation * 0.5f)) * 10;
+        float mercuryY = (float) Math.cos(Math.toRadians(rotation * 0.5f)) * 10 + 10;
+        mercuryEntity.setPosition(mercuryX, mercuryY, 3);
+        mercuryEntity.updateModelMatrix();
+
+        // 金星运动（缓慢移动）
+        float venusX = (float) Math.sin(Math.toRadians(rotation * 0.4f)) * 20;
+        float venusY = (float) Math.cos(Math.toRadians(rotation * 0.4f)) * 20 + 20;
+        venusEntity.setPosition(venusX, venusY, 30);
+        venusEntity.updateModelMatrix();
+
+        // 火星运动（缓慢移动）
+        float marsX = (float) Math.sin(Math.toRadians(rotation * 0.3f)) * 10;
+        float marsY = (float) Math.cos(Math.toRadians(rotation * 0.3f)) * 10 + 10;
+        marsEntity.setPosition(marsX, marsY, 3);
         marsEntity.updateModelMatrix();
+
+        // 木星运动（缓慢移动）
+        float jupiterX = (float) Math.sin(Math.toRadians(rotation * 0.2f)) * 50;
+        float jupiterY = (float) Math.cos(Math.toRadians(rotation * 0.2f)) * 50 + 50;
+        jupiterEntity.setPosition(jupiterX, jupiterY, 50);
+        jupiterEntity.updateModelMatrix();
+
+        // 土星运动（缓慢移动）
+        float saturnX = (float) Math.sin(Math.toRadians(rotation * 0.15f)) * 60;
+        float saturnY = (float) Math.cos(Math.toRadians(rotation * 0.15f)) * 60 + 60;
+        saturnEntity.setPosition(saturnX, saturnY, 20);
+        saturnEntity.updateModelMatrix();
+
+        // 天王星运动（缓慢移动）
+        float uranusX = (float) Math.sin(Math.toRadians(rotation * 0.1f)) * 70;
+        float uranusY = (float) Math.cos(Math.toRadians(rotation * 0.1f)) * 70 + 70;
+        uranusEntity.setPosition(uranusX, uranusY, 25);
+        uranusEntity.updateModelMatrix();
+
+        // 海王星运动（缓慢移动）
+        float neptuneX = (float) Math.sin(Math.toRadians(rotation * 0.08f)) * 80;
+        float neptuneY = (float) Math.cos(Math.toRadians(rotation * 0.08f)) * 80 + 80;
+        neptuneEntity.setPosition(neptuneX, neptuneY, 50);
+        neptuneEntity.updateModelMatrix();
+
         skyBoxEntity.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
         skyBoxEntity.updateModelMatrix();
     }
