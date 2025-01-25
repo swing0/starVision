@@ -83,7 +83,7 @@ public class SceneRender {
         List<Texture> textures = textureCache.getAll().stream().toList();
         int numTextures = textures.size();
         if (numTextures > MAX_TEXTURES) {
-            Logger.warn("Only " + MAX_TEXTURES + " textures can be used"); //TODO
+            Logger.warn("Only " + MAX_TEXTURES + " textures can be used");
         }
         for (int i = 0; i < Math.min(MAX_TEXTURES, numTextures); i++) {
             uniformsMap.setUniform("txtSampler[" + i + "]", i);
