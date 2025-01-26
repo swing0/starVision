@@ -19,7 +19,7 @@ public class SkyBox {
         mesh = new Mesh(meshData);
         skyBoxModel.getMeshDataList().clear();
         skyBoxEntity = new Entity("skyBoxEntity-entity", skyBoxModel.getId());
-        skyBoxNum = 1;
+        skyBoxNum = 0;
     }
 
     public int getSkyBoxNum() {
@@ -51,8 +51,12 @@ public class SkyBox {
     }
 
     public void changeTexture() {
-        String path = "resources/models/skybox/skybox1.png";
+        String path = "resources/models/skybox/skybox0.png";
         switch (skyBoxNum) {
+            case 0 ->{
+                path = "resources/models/skybox/skybox1.png";
+                skyBoxNum = 1;
+            }
             case 1 -> {
                 path = "resources/models/skybox/skybox2.png";
                 skyBoxNum = 2;
@@ -62,8 +66,8 @@ public class SkyBox {
                 skyBoxNum = 3;
             }
             case 3 -> {
-                path = "resources/models/skybox/skybox1.png";
-                skyBoxNum = 1;
+                path = "resources/models/skybox/skybox0.png";
+                skyBoxNum = 0;
             }
         }
 

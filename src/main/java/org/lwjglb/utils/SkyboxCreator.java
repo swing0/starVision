@@ -8,22 +8,23 @@ import javax.imageio.ImageIO;
 /**
  * 将从Stellarium生成的6张图片转为需要的天空盒图片格式
  * 参考 https://zhuanlan.zhihu.com/p/377263547
+ * 如果是白天，开启太阳系的天体，再手动把太阳月亮p掉
  */
 public class SkyboxCreator {
 
-    private static final int CROPPED_SIZE = 1361;
+    private static final int CROPPED_SIZE = 1080;//2k屏幕1361；1080p屏幕1080
 
     //north==front; east==left; west==right; south==back
     public static void main(String[] args) {
         try {
             createSkybox(
-                    "src/main/java/org/lwjglb/utils/images/Unity2-east.png",
-                    "src/main/java/org/lwjglb/utils/images/Unity3-south.png",
-                    "src/main/java/org/lwjglb/utils/images/Unity4-west.png",
-                    "src/main/java/org/lwjglb/utils/images/Unity1-north.png",
-                    "src/main/java/org/lwjglb/utils/images/Unity5-top.png",
-                    "src/main/java/org/lwjglb/utils/images/Unity6-bottom.png",
-                    "resources/models/skybox/skybox3.png"
+                    "src/main/java/org/lwjglb/utils/images/beijingDay/Unity2-east.png",
+                    "src/main/java/org/lwjglb/utils/images/beijingDay/Unity3-south.png",
+                    "src/main/java/org/lwjglb/utils/images/beijingDay/Unity4-west.png",
+                    "src/main/java/org/lwjglb/utils/images/beijingDay/Unity1-north.png",
+                    "src/main/java/org/lwjglb/utils/images/beijingDay/Unity5-top.png",
+                    "src/main/java/org/lwjglb/utils/images/beijingDay/Unity6-bottom.png",
+                    "resources/models/skybox/skybox0.png"
             );
         } catch (Exception e) {
             e.printStackTrace();
