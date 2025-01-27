@@ -9,6 +9,7 @@ public class SkyBox {
     private Entity skyBoxEntity;
     private Model skyBoxModel;
     private int skyBoxNum;
+    private boolean isDay = true;
     private TextureCache textureCache;
 
     public SkyBox(String skyBoxModelPath, TextureCache textureCache, MaterialCache materialCache) {
@@ -50,8 +51,35 @@ public class SkyBox {
         return skyBoxModel;
     }
 
-    public void changeTexture() {
-        String path = "resources/models/skybox/skybox0.png";
+    public boolean isDay() {
+        return isDay;
+    }
+
+    public void setDay(boolean day) {
+        isDay = day;
+    }
+
+    public void switchDayNight(){
+        String path;
+        if (isDay){
+            //切换到白天的天空盒
+            path = "resources/models/skybox/skybox0.png";
+            skyBoxNum = 0;
+        }else {
+            //切换到夜晚的天空盒
+            path = "resources/models/skybox/skybox1.png";
+            skyBoxNum = 1;
+        }
+        // 设置新的纹理路径并加载新纹理
+        material.setTexturePath(path);
+        textureCache.createTexture(path);
+    }
+
+    public void changeNightSky() {
+        if (isDay){
+            return;
+        }
+        String path = "resources/models/skybox/skybox1.png";
         switch (skyBoxNum) {
             case 0 ->{
                 path = "resources/models/skybox/skybox1.png";
@@ -66,8 +94,8 @@ public class SkyBox {
                 skyBoxNum = 3;
             }
             case 3 -> {
-                path = "resources/models/skybox/skybox0.png";
-                skyBoxNum = 0;
+                path = "resources/models/skybox/skybox1.png";
+                skyBoxNum = 1;
             }
         }
 

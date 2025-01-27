@@ -167,7 +167,7 @@ public class Main implements IAppLogic {
             timeSpeed = TIME_DEFAULT_SPEED;
         }
         if (window.isKeyClick(GLFW_KEY_TAB)) {
-            scene.getSkyBox().changeTexture();
+            scene.getSkyBox().changeNightSky();
         }
         //按PAGE_UP与PAGE_DOWN实现望远镜效果
         if (window.isKeyClick(GLFW_KEY_PAGE_UP) && scopeNum > 10.0f){
@@ -265,6 +265,17 @@ public class Main implements IAppLogic {
         neptuneEntity.setPosition(neptuneX, neptuneY, 50);
         neptuneEntity.updateModelMatrix();
 
+        if (lightAngle > 100 && lightAngle < 280) { // 假设光照角度大于120且小于300度为夜晚
+            if (scene.getSkyBox().isDay()) {
+                scene.getSkyBox().setDay(false);
+                scene.getSkyBox().switchDayNight(); // 切换到夜晚天空盒
+            }
+        } else {
+            if (!scene.getSkyBox().isDay()) {
+                scene.getSkyBox().setDay(true);
+                scene.getSkyBox().switchDayNight(); // 切换到白天天空盒
+            }
+        }
         skyBoxEntity.setRotation(1, 1, 1, (float) Math.toRadians(360 - rotation));
         skyBoxEntity.updateModelMatrix();
     }
