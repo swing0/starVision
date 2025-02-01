@@ -1,6 +1,6 @@
 #version 400
 
-const int MAX_MATERIALS  = 50;
+const int MAX_MATERIALS  = 100;
 const int MAX_TEXTURES = 30;
 
 in vec3 outNormal;

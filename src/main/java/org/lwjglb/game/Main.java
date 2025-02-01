@@ -55,17 +55,33 @@ public class Main implements IAppLogic {
         scene.addModel(terrainModel);
         Entity terrainEntity = new Entity("terrainEntity", terrainModelId);
         terrainEntity.setScale(500.0f);
+        terrainEntity.setPosition(0,-0.3f,0);
         terrainEntity.updateModelMatrix();
         scene.addEntity(terrainEntity);
 
-        String villageHouseId = "villageHouse";
-        Model villageHouseModel = ModelLoader.loadModel(villageHouseId, "resources/models/terrain/villageHouse.obj",
+        //村庄场景
+//        String villageHouseId = "villageHouse";
+//        Model villageHouseModel = ModelLoader.loadModel(villageHouseId, "resources/models/village/villageHouse.obj",
+//                scene.getTextureCache(), scene.getMaterialCache(), false);
+//        scene.addModel(villageHouseModel);
+//        Entity villageHouseEntity = new Entity("villageHouseEntity", villageHouseId);
+//        villageHouseEntity.setScale(0.01f);
+//        villageHouseEntity.setPosition(0,-0.3f,0);
+//        villageHouseEntity.updateModelMatrix();
+//        scene.addEntity(villageHouseEntity);
+
+
+        //雪屋场景
+        String snowLakeId = "snowLake";
+        Model snowLakeModel = ModelLoader.loadModel(snowLakeId, "resources/models/snowLake/snow_lake.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(villageHouseModel);
-        Entity villageHouseEntity = new Entity("villageHouseEntity", villageHouseId);
-        villageHouseEntity.setScale(0.01f);
-        villageHouseEntity.updateModelMatrix();
-        scene.addEntity(villageHouseEntity);
+        scene.addModel(snowLakeModel);
+        Entity snowLakeEntity = new Entity("snowLakeEntity", snowLakeId);
+        snowLakeEntity.setPosition(0,-0.3f,10);
+        snowLakeEntity.setScale(0.02f);
+        snowLakeEntity.updateModelMatrix();
+        scene.addEntity(snowLakeEntity);
+
 
         String bobModelId = "bobModel";
         Model bobModel = ModelLoader.loadModel(bobModelId, "resources/models/bob/boblamp.md5mesh",
@@ -73,7 +89,7 @@ public class Main implements IAppLogic {
         scene.addModel(bobModel);
         Entity bobEntity = new Entity("bobEntity-1", bobModelId);
         bobEntity.setScale(0.05f);
-        bobEntity.setPosition(0, 0.3f, 0);
+        bobEntity.setPosition(0, 0, 0);
         bobEntity.updateModelMatrix();
         animationData1 = new AnimationData(bobModel.getAnimationList().get(0));
         bobEntity.setAnimationData(animationData1);
@@ -189,6 +205,18 @@ public class Main implements IAppLogic {
         if (mouseInput.isRightButtonPressed()) {
             Vector2f displVec = mouseInput.getDisplVec();
             camera.addRotation((float) Math.toRadians(displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(displVec.y * MOUSE_SENSITIVITY));
+        }
+
+        //场景切换并重新加载
+        if (window.isKeyClick(GLFW_KEY_F1)){
+            //村庄场景
+
+
+        }
+
+        //场景切换并重新加载
+        if (window.isKeyClick(GLFW_KEY_F2)){
+            //雪地场景
         }
 
     }
