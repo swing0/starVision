@@ -1,4 +1,4 @@
-mtllib terrain.mtl
+mtllib snow_terrain.mtl
 g default
 v  1.000000  0.000000  1.000000
 v -1.000000  0.000000  1.000000

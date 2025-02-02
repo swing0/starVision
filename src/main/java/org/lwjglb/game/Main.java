@@ -17,8 +17,8 @@ public class Main implements IAppLogic {
     private static final float TIME_DEFAULT_SPEED = 1 * 0.01f;
 
     private AnimationData animationData1;
-    private Entity cubeEntity1;
-    private Entity cubeEntity2;
+    private Entity snowLakeEntity;
+    private Entity villageHouseEntity;
     private Entity sunEntity;
     private Entity moonEntity;
     private Entity mercuryEntity;
@@ -33,6 +33,7 @@ public class Main implements IAppLogic {
     private float rotation;
     private float timeSpeed;
     private float scopeNum = 60.0f;
+    private float snowPosition = 1000.0f;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -49,35 +50,44 @@ public class Main implements IAppLogic {
 
     @Override
     public void init(Window window, Scene scene, Render render) {
-        String terrainModelId = "terrain";
-        Model terrainModel = ModelLoader.loadModel(terrainModelId, "resources/models/terrain/terrain.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(terrainModel);
-        Entity terrainEntity = new Entity("terrainEntity", terrainModelId);
-        terrainEntity.setScale(500.0f);
-        terrainEntity.setPosition(0,-0.3f,0);
-        terrainEntity.updateModelMatrix();
-        scene.addEntity(terrainEntity);
 
         //村庄场景
-//        String villageHouseId = "villageHouse";
-//        Model villageHouseModel = ModelLoader.loadModel(villageHouseId, "resources/models/village/villageHouse.obj",
-//                scene.getTextureCache(), scene.getMaterialCache(), false);
-//        scene.addModel(villageHouseModel);
-//        Entity villageHouseEntity = new Entity("villageHouseEntity", villageHouseId);
-//        villageHouseEntity.setScale(0.01f);
-//        villageHouseEntity.setPosition(0,-0.3f,0);
-//        villageHouseEntity.updateModelMatrix();
-//        scene.addEntity(villageHouseEntity);
+        String glassTerrainModelId = "glass-terrain";
+        Model glassTerrainModel = ModelLoader.loadModel(glassTerrainModelId, "resources/models/terrain/glass_terrain.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(glassTerrainModel);
+        Entity glassTerrainEntity = new Entity("glassTerrainEntity", glassTerrainModelId);
+        glassTerrainEntity.setScale(500.0f);
+        glassTerrainEntity.setPosition(0,-0.3f,0);
+        glassTerrainEntity.updateModelMatrix();
+        scene.addEntity(glassTerrainEntity);
+        String villageHouseId = "villageHouse";
+        Model villageHouseModel = ModelLoader.loadModel(villageHouseId, "resources/models/village/villageHouse.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(villageHouseModel);
+        villageHouseEntity = new Entity("villageHouseEntity", villageHouseId);
+        villageHouseEntity.setScale(0.01f);
+        villageHouseEntity.setPosition(0,-0.3f,0);
+        villageHouseEntity.updateModelMatrix();
+        scene.addEntity(villageHouseEntity);
 
 
         //雪屋场景
+        String snowTerrainModelId = "snow-terrain";
+        Model snowTerrainModel = ModelLoader.loadModel(snowTerrainModelId, "resources/models/terrain/snow_terrain.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(snowTerrainModel);
+        Entity snowTerrainEntity = new Entity("snowTerrainEntity", snowTerrainModelId);
+        snowTerrainEntity.setScale(500.0f);
+        snowTerrainEntity.setPosition(0,-0.3f,0 + snowPosition);
+        snowTerrainEntity.updateModelMatrix();
+        scene.addEntity(snowTerrainEntity);
         String snowLakeId = "snowLake";
         Model snowLakeModel = ModelLoader.loadModel(snowLakeId, "resources/models/snowLake/snow_lake.obj",
                 scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(snowLakeModel);
-        Entity snowLakeEntity = new Entity("snowLakeEntity", snowLakeId);
-        snowLakeEntity.setPosition(0,-0.3f,10);
+        snowLakeEntity = new Entity("snowLakeEntity", snowLakeId);
+        snowLakeEntity.setPosition(0,-0.3f,0 + snowPosition);
         snowLakeEntity.setScale(0.02f);
         snowLakeEntity.updateModelMatrix();
         scene.addEntity(snowLakeEntity);
@@ -207,16 +217,17 @@ public class Main implements IAppLogic {
             camera.addRotation((float) Math.toRadians(displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(displVec.y * MOUSE_SENSITIVITY));
         }
 
-        //场景切换并重新加载
+
         if (window.isKeyClick(GLFW_KEY_F1)){
             //村庄场景
-
+            camera.setPosition(-1.5f,3.0f, 4.5f);
 
         }
 
         //场景切换并重新加载
         if (window.isKeyClick(GLFW_KEY_F2)){
             //雪地场景
+            camera.setPosition(-1.5f, 3.0f, 4.5f + snowPosition);
         }
 
     }
