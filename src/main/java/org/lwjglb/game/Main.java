@@ -15,10 +15,12 @@ public class Main implements IAppLogic {
     private static final float MOUSE_SENSITIVITY = 0.1f;
     private static final float MOVEMENT_SPEED = 0.005f;
     private static final float TIME_DEFAULT_SPEED = 1 * 0.01f;
+    private static final float POSITION_OFFSET = 1000.0f;
 
     private AnimationData animationData1;
-    private Entity snowLakeEntity;
     private Entity villageHouseEntity;
+    private Entity snowLakeEntity;
+    private Entity isLandEntity;
     private Entity sunEntity;
     private Entity moonEntity;
     private Entity mercuryEntity;
@@ -33,7 +35,6 @@ public class Main implements IAppLogic {
     private float rotation;
     private float timeSpeed;
     private float scopeNum = 60.0f;
-    private float snowPosition = 1000.0f;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -79,7 +80,7 @@ public class Main implements IAppLogic {
         scene.addModel(snowTerrainModel);
         Entity snowTerrainEntity = new Entity("snowTerrainEntity", snowTerrainModelId);
         snowTerrainEntity.setScale(500.0f);
-        snowTerrainEntity.setPosition(0,-0.3f,0 + snowPosition);
+        snowTerrainEntity.setPosition(0,-0.3f,0 + POSITION_OFFSET);
         snowTerrainEntity.updateModelMatrix();
         scene.addEntity(snowTerrainEntity);
         String snowLakeId = "snowLake";
@@ -87,10 +88,31 @@ public class Main implements IAppLogic {
                 scene.getTextureCache(), scene.getMaterialCache(), false);
         scene.addModel(snowLakeModel);
         snowLakeEntity = new Entity("snowLakeEntity", snowLakeId);
-        snowLakeEntity.setPosition(0,-0.3f,0 + snowPosition);
+        snowLakeEntity.setPosition(0,-0.3f,0 + POSITION_OFFSET);
         snowLakeEntity.setScale(0.02f);
         snowLakeEntity.updateModelMatrix();
         scene.addEntity(snowLakeEntity);
+
+
+        //小岛场景
+        String isLandTerrainModelId = "isLand-terrain";
+        Model isLandTerrainModel = ModelLoader.loadModel(isLandTerrainModelId, "resources/models/terrain/island_terrain.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(isLandTerrainModel);
+        Entity isLandTerrainEntity = new Entity("isLandTerrainEntity", isLandTerrainModelId);
+        isLandTerrainEntity.setScale(500.0f);
+        isLandTerrainEntity.setPosition(0 + POSITION_OFFSET ,-0.3f,0);
+        isLandTerrainEntity.updateModelMatrix();
+        scene.addEntity(isLandTerrainEntity);
+        String isLandLakeId = "isLand";
+        Model isLandModel = ModelLoader.loadModel(isLandLakeId, "resources/models/island/island.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(isLandModel);
+        isLandEntity = new Entity("isLandEntity", isLandLakeId);
+        isLandEntity.setPosition(0 + POSITION_OFFSET,-0.3f,0);
+        isLandEntity.setScale(0.03f);
+        isLandEntity.updateModelMatrix();
+        scene.addEntity(isLandEntity);
 
 
         String bobModelId = "bobModel";
@@ -223,11 +245,16 @@ public class Main implements IAppLogic {
             camera.setPosition(-1.5f,3.0f, 4.5f);
 
         }
-
-        //场景切换并重新加载
         if (window.isKeyClick(GLFW_KEY_F2)){
             //雪地场景
-            camera.setPosition(-1.5f, 3.0f, 4.5f + snowPosition);
+            camera.setPosition(-1.5f, 3.0f, 4.5f + POSITION_OFFSET);
+        }
+        if (window.isKeyClick(GLFW_KEY_F3)){
+            //小岛场景
+            camera.setPosition(80.f + POSITION_OFFSET, 3.0f, -20.0f);
+        }
+        if (window.isKeyClick(GLFW_KEY_P)){
+            System.out.println("( " + camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z +")");
         }
 
     }
