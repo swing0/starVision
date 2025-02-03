@@ -14,7 +14,7 @@ public class SceneRender {
     public static final int MAX_DRAW_ELEMENTS = 100;
     public static final int MAX_ENTITIES = 100;
     private static final int COMMAND_SIZE = 5 * 4;
-    private static final int MAX_MATERIALS = 100;
+    private static final int MAX_MATERIALS = 150;
     private static final int MAX_TEXTURES = 30;
     private int animDrawCount;
     private int animRenderBufferHandle;

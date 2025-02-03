@@ -21,6 +21,7 @@ public class Main implements IAppLogic {
     private Entity villageHouseEntity;
     private Entity snowLakeEntity;
     private Entity isLandEntity;
+    private Entity mountainEntity;
     private Entity sunEntity;
     private Entity moonEntity;
     private Entity mercuryEntity;
@@ -53,66 +54,17 @@ public class Main implements IAppLogic {
     public void init(Window window, Scene scene, Render render) {
 
         //村庄场景
-        String glassTerrainModelId = "glass-terrain";
-        Model glassTerrainModel = ModelLoader.loadModel(glassTerrainModelId, "resources/models/terrain/glass_terrain.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(glassTerrainModel);
-        Entity glassTerrainEntity = new Entity("glassTerrainEntity", glassTerrainModelId);
-        glassTerrainEntity.setScale(500.0f);
-        glassTerrainEntity.setPosition(0,-0.3f,0);
-        glassTerrainEntity.updateModelMatrix();
-        scene.addEntity(glassTerrainEntity);
-        String villageHouseId = "villageHouse";
-        Model villageHouseModel = ModelLoader.loadModel(villageHouseId, "resources/models/village/villageHouse.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(villageHouseModel);
-        villageHouseEntity = new Entity("villageHouseEntity", villageHouseId);
-        villageHouseEntity.setScale(0.01f);
-        villageHouseEntity.setPosition(0,-0.3f,0);
-        villageHouseEntity.updateModelMatrix();
-        scene.addEntity(villageHouseEntity);
-
+        createScene(scene,"village",villageHouseEntity, 0f,-0.3f,0f,0.01f);
 
         //雪屋场景
-        String snowTerrainModelId = "snow-terrain";
-        Model snowTerrainModel = ModelLoader.loadModel(snowTerrainModelId, "resources/models/terrain/snow_terrain.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(snowTerrainModel);
-        Entity snowTerrainEntity = new Entity("snowTerrainEntity", snowTerrainModelId);
-        snowTerrainEntity.setScale(500.0f);
-        snowTerrainEntity.setPosition(0,-0.3f,0 + POSITION_OFFSET);
-        snowTerrainEntity.updateModelMatrix();
-        scene.addEntity(snowTerrainEntity);
-        String snowLakeId = "snowLake";
-        Model snowLakeModel = ModelLoader.loadModel(snowLakeId, "resources/models/snowLake/snow_lake.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(snowLakeModel);
-        snowLakeEntity = new Entity("snowLakeEntity", snowLakeId);
-        snowLakeEntity.setPosition(0,-0.3f,0 + POSITION_OFFSET);
-        snowLakeEntity.setScale(0.02f);
-        snowLakeEntity.updateModelMatrix();
-        scene.addEntity(snowLakeEntity);
-
+        createScene(scene,"snow",snowLakeEntity, 0,-0.3f,0 + POSITION_OFFSET,0.02f);
 
         //小岛场景
-        String isLandTerrainModelId = "isLand-terrain";
-        Model isLandTerrainModel = ModelLoader.loadModel(isLandTerrainModelId, "resources/models/terrain/island_terrain.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(isLandTerrainModel);
-        Entity isLandTerrainEntity = new Entity("isLandTerrainEntity", isLandTerrainModelId);
-        isLandTerrainEntity.setScale(500.0f);
-        isLandTerrainEntity.setPosition(0 + POSITION_OFFSET ,-0.3f,0);
-        isLandTerrainEntity.updateModelMatrix();
-        scene.addEntity(isLandTerrainEntity);
-        String isLandLakeId = "isLand";
-        Model isLandModel = ModelLoader.loadModel(isLandLakeId, "resources/models/island/island.obj",
-                scene.getTextureCache(), scene.getMaterialCache(), false);
-        scene.addModel(isLandModel);
-        isLandEntity = new Entity("isLandEntity", isLandLakeId);
-        isLandEntity.setPosition(0 + POSITION_OFFSET,-0.3f,0);
-        isLandEntity.setScale(0.03f);
-        isLandEntity.updateModelMatrix();
-        scene.addEntity(isLandEntity);
+        createScene(scene,"island",isLandEntity, 0 + POSITION_OFFSET,-0.3f,0,0.03f);
+
+        //山脉场景
+        createScene(scene,"mountain",mountainEntity, 0,0.3f,0 - POSITION_OFFSET ,0.0005f);
+
 
 
         String bobModelId = "bobModel";
@@ -179,7 +131,7 @@ public class Main implements IAppLogic {
         skyBoxEntity = skyBox.getSkyBoxEntity();
 
 
-//        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.01f));
+        scene.setFog(new Fog(true, new Vector3f(0.5f, 0.5f, 0.5f), 0.003f));
 
         Camera camera = scene.getCamera();
         camera.setPosition(-1.5f, 3.0f, 4.5f);
@@ -187,6 +139,26 @@ public class Main implements IAppLogic {
 
         lightAngle = 45.001f;
         timeSpeed = TIME_DEFAULT_SPEED;
+    }
+
+    private void createScene(Scene scene, String name,Entity entity, float x, float y, float z, float s) {
+        String terrainModelId = name + "-terrain";
+        Model terrainModel = ModelLoader.loadModel(terrainModelId, "resources/models/terrain/" +name + "_terrain.obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(terrainModel);
+        Entity terrainEntity = new Entity(name + "TerrainEntity", terrainModelId);
+        terrainEntity.setScale(500.0f);
+        terrainEntity.setPosition(x,y,z);
+        terrainEntity.updateModelMatrix();
+        scene.addEntity(terrainEntity);
+        Model isLandModel = ModelLoader.loadModel(name, "resources/models/"+name+"/"+name+".obj",
+                scene.getTextureCache(), scene.getMaterialCache(), false);
+        scene.addModel(isLandModel);
+        entity = new Entity(name + "Entity", name);
+        entity.setPosition(x,y,z);
+        entity.setScale(s);
+        entity.updateModelMatrix();
+        scene.addEntity(entity);
     }
 
     @Override
@@ -243,7 +215,6 @@ public class Main implements IAppLogic {
         if (window.isKeyClick(GLFW_KEY_F1)){
             //村庄场景
             camera.setPosition(-1.5f,3.0f, 4.5f);
-
         }
         if (window.isKeyClick(GLFW_KEY_F2)){
             //雪地场景
@@ -252,6 +223,10 @@ public class Main implements IAppLogic {
         if (window.isKeyClick(GLFW_KEY_F3)){
             //小岛场景
             camera.setPosition(80.f + POSITION_OFFSET, 3.0f, -20.0f);
+        }
+        if (window.isKeyClick(GLFW_KEY_F4)){
+            //山脉场景
+            camera.setPosition(-1.5f, 4.0f, 4.5f - POSITION_OFFSET);
         }
         if (window.isKeyClick(GLFW_KEY_P)){
             System.out.println("( " + camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z +")");
