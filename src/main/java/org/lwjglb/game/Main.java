@@ -18,10 +18,18 @@ public class Main implements IAppLogic {
     private static final float POSITION_OFFSET = 1000.0f;
 
     private AnimationData animationData1;
+    private Entity bobEntity; // 添加Bob实体引用
+    private PointLight candleLight; // 村庄光源
+    private PointLight snowLight; // 雪屋光源
+    private SpotLight flashlight;
+    private boolean isFlashlightOn = false;
+    private static final float FLASHLIGHT_INTENSITY = 15.0f;
+    private static final float FLASHLIGHT_CUTOFF = 15.0f;
     private Entity villageHouseEntity;
     private Entity snowLakeEntity;
     private Entity isLandEntity;
     private Entity mountainEntity;
+    private Entity desertEntity;
     private Entity sunEntity;
     private Entity moonEntity;
     private Entity mercuryEntity;
@@ -65,13 +73,15 @@ public class Main implements IAppLogic {
         //山脉场景
         createScene(scene,"mountain",mountainEntity, 0,0.3f,0 - POSITION_OFFSET ,0.0005f);
 
+        //沙漠场景
+//        createScene(scene,"desert",desertEntity, 0f,-0.3f,0f,0.01f);
 
 
         String bobModelId = "bobModel";
         Model bobModel = ModelLoader.loadModel(bobModelId, "resources/models/bob/boblamp.md5mesh",
                 scene.getTextureCache(), scene.getMaterialCache(), true);
         scene.addModel(bobModel);
-        Entity bobEntity = new Entity("bobEntity-1", bobModelId);
+        bobEntity = new Entity("bobEntity-1", bobModelId);
         bobEntity.setScale(0.05f);
         bobEntity.setPosition(0, 0, 0);
         bobEntity.updateModelMatrix();
@@ -122,6 +132,48 @@ public class Main implements IAppLogic {
         dirLight.setPosition(0, 1, 0);
         dirLight.setIntensity(1.0f);
         scene.setSceneLights(sceneLights);
+
+        // 村庄灯光
+        candleLight = new PointLight(
+                new Vector3f(1.0f, 0.75f, 0.3f), // 橙黄色调
+                new Vector3f(-1.0f, 2.0f, 0),
+                0f                             // 强度
+        );
+        candleLight.setAttenuation(new PointLight.Attenuation(
+                1.0f,     // constant
+                0.045f,    // linear
+                0.0075f    // exponent
+        ));
+
+        // 雪屋灯光
+        snowLight = new PointLight(
+                new Vector3f(1.0f, 0.75f, 0.3f), // 橙黄色调
+                new Vector3f(0, 15, 0 + POSITION_OFFSET),
+                0f                             // 强度
+        );
+        snowLight.setAttenuation(new PointLight.Attenuation(
+                1.0f,     // constant
+                0.045f,    // linear
+                0.0075f    // exponent
+        ));
+        // 初始化手电筒光源
+        PointLight flashLightPoint = new PointLight(
+                new Vector3f(0.9f, 0.9f, 1.0f), // 冷白色
+                new Vector3f(0, 0, 0),
+                FLASHLIGHT_INTENSITY
+        );
+        flashLightPoint.setAttenuation(new PointLight.Attenuation(
+                1.0f, 0.02f, 0.003f
+        ));
+
+        flashlight = new SpotLight(
+                flashLightPoint,
+                new Vector3f(0, 0, 1), // 初始方向
+                FLASHLIGHT_CUTOFF
+        );
+        scene.getSceneLights().getPointLights().add(candleLight);
+        scene.getSceneLights().getPointLights().add(snowLight);
+        scene.getSceneLights().getSpotLights().add(flashlight);
 
         SkyBox skyBox = new SkyBox("resources/models/skybox/skybox.obj", scene.getTextureCache(),
                 scene.getMaterialCache());
@@ -211,14 +263,19 @@ public class Main implements IAppLogic {
             camera.addRotation((float) Math.toRadians(displVec.x * MOUSE_SENSITIVITY), (float) Math.toRadians(displVec.y * MOUSE_SENSITIVITY));
         }
 
-
+        if (window.isKeyClick(GLFW_KEY_F)) {
+            isFlashlightOn = !isFlashlightOn;
+            flashlight.getPointLight().setIntensity(isFlashlightOn ? FLASHLIGHT_INTENSITY : 0.0f);
+            System.out.println("isFlashlightOn: " + isFlashlightOn);
+            System.out.println(flashlight.getPointLight().getPosition());
+        }
         if (window.isKeyClick(GLFW_KEY_F1)){
             //村庄场景
             camera.setPosition(-1.5f,3.0f, 4.5f);
         }
         if (window.isKeyClick(GLFW_KEY_F2)){
             //雪地场景
-            camera.setPosition(-1.5f, 3.0f, 4.5f + POSITION_OFFSET);
+            camera.setPosition(-1.5f, 3.0f, 10.0f + POSITION_OFFSET);
         }
         if (window.isKeyClick(GLFW_KEY_F3)){
             //小岛场景
@@ -306,13 +363,29 @@ public class Main implements IAppLogic {
         neptuneEntity.setPosition(neptuneX, neptuneY, 50);
         neptuneEntity.updateModelMatrix();
 
+        // 更新手电筒位置和方向
+        Camera camera = scene.getCamera();
+        Vector3f cameraPos = camera.getPosition();
+        Vector3f cameraFront = camera.getFrontDirection(); // 需要确保Camera类有获取方向的方法
+
+        // 设置手电筒位置（稍微在摄像机前方）
+        Vector3f flashlightPos = cameraPos.add(cameraFront.mul(0.2f), new Vector3f());
+        flashlight.getPointLight().setPosition(flashlightPos);
+
+        // 设置手电筒方向
+        flashlight.setConeDirection(cameraFront);
+
         if (lightAngle > 100 && lightAngle < 280) { // 假设光照角度大于120且小于300度为夜晚
             if (scene.getSkyBox().isDay()) {
+                candleLight.setIntensity(5.0f);
+                snowLight.setIntensity(10.0f);
                 scene.getSkyBox().setDay(false);
                 scene.getSkyBox().switchDayNight(); // 切换到夜晚天空盒
             }
         } else {
             if (!scene.getSkyBox().isDay()) {
+                candleLight.setIntensity(0.0f);
+                snowLight.setIntensity(0.0f);
                 scene.getSkyBox().setDay(true);
                 scene.getSkyBox().switchDayNight(); // 切换到白天天空盒
             }

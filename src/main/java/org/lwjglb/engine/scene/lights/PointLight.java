@@ -52,6 +52,10 @@ public class PointLight {
         position.set(x, y, z);
     }
 
+    public void setPosition(Vector3f position){
+        this.position = position;
+    }
+
     public static class Attenuation {
 
         private float constant;

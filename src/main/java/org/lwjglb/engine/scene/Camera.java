@@ -104,4 +104,10 @@ public class Camera {
     public float getFov() {
         return fov;
     }
+    public Vector3f getFrontDirection() {
+        Vector3f front = new Vector3f();
+        // 从viewMatrix中提取正Z方向并取反
+        viewMatrix.positiveZ(front).negate();
+        return front.normalize();
+    }
 }
