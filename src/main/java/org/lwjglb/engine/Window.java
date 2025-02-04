@@ -72,6 +72,9 @@ public class Window {
             keyCallBack(key, action);
         });
 
+        // 隐藏鼠标光标并禁用鼠标光标限制
+//        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
         glfwMakeContextCurrent(windowHandle);
 
         if (opts.fps > 0) {

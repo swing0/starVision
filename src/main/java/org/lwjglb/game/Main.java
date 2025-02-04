@@ -160,7 +160,7 @@ public class Main implements IAppLogic {
         PointLight flashLightPoint = new PointLight(
                 new Vector3f(0.9f, 0.9f, 1.0f), // 冷白色
                 new Vector3f(0, 0, 0),
-                FLASHLIGHT_INTENSITY
+                0
         );
         flashLightPoint.setAttenuation(new PointLight.Attenuation(
                 1.0f, 0.02f, 0.003f
@@ -256,6 +256,17 @@ public class Main implements IAppLogic {
             scene.getProjection().setFov(newFov);
             scene.getProjection().updateProjMatrix(window.getWidth(), window.getHeight());
         }
+        float fogDensity = scene.getFog().getDensity();
+        if (window.isKeyClick(GLFW_KEY_UP) && fogDensity<0.1f){
+            fogDensity += 0.001f;
+            scene.getFog().setDensity(fogDensity);;
+            System.out.println(scene.getFog().getDensity());
+        }
+        if (window.isKeyClick(GLFW_KEY_DOWN) && fogDensity>0.001f){
+            fogDensity -= 0.001f;
+            scene.getFog().setDensity(fogDensity);;
+            System.out.println(scene.getFog().getDensity());
+        }
 
         MouseInput mouseInput = window.getMouseInput();
         if (mouseInput.isRightButtonPressed()) {
@@ -266,8 +277,6 @@ public class Main implements IAppLogic {
         if (window.isKeyClick(GLFW_KEY_F)) {
             isFlashlightOn = !isFlashlightOn;
             flashlight.getPointLight().setIntensity(isFlashlightOn ? FLASHLIGHT_INTENSITY : 0.0f);
-            System.out.println("isFlashlightOn: " + isFlashlightOn);
-            System.out.println(flashlight.getPointLight().getPosition());
         }
         if (window.isKeyClick(GLFW_KEY_F1)){
             //村庄场景
