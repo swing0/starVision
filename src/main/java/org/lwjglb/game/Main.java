@@ -1,10 +1,15 @@
 package org.lwjglb.game;
 
 import org.joml.*;
+import org.lwjgl.openal.AL11;
 import org.lwjglb.engine.*;
 import org.lwjglb.engine.graph.*;
 import org.lwjglb.engine.scene.*;
 import org.lwjglb.engine.scene.lights.*;
+import org.lwjglb.engine.sound.SoundBuffer;
+import org.lwjglb.engine.sound.SoundListener;
+import org.lwjglb.engine.sound.SoundManager;
+import org.lwjglb.engine.sound.SoundSource;
 
 import java.lang.Math;
 
@@ -44,6 +49,9 @@ public class Main implements IAppLogic {
     private float rotation;
     private float timeSpeed;
     private float scopeNum = 60.0f;
+
+    private SoundSource playerSoundSource;
+    private SoundManager soundMgr;
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -191,6 +199,7 @@ public class Main implements IAppLogic {
 
         lightAngle = 45.001f;
         timeSpeed = TIME_DEFAULT_SPEED;
+        initSounds(bobEntity.getPosition(), camera);
     }
 
     private void createScene(Scene scene, String name,Entity entity, float x, float y, float z, float s) {
@@ -211,6 +220,18 @@ public class Main implements IAppLogic {
         entity.setScale(s);
         entity.updateModelMatrix();
         scene.addEntity(entity);
+    }
+
+
+    private void initSounds(Vector3f position, Camera camera) {
+        soundMgr = new SoundManager();
+        soundMgr.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
+        soundMgr.setListener(new SoundListener(camera.getPosition()));
+        SoundBuffer buffer = new SoundBuffer("resources/sounds/bgm.ogg");
+        soundMgr.addSoundBuffer(buffer);
+        playerSoundSource= new SoundSource(true, true);
+        playerSoundSource.setBuffer(buffer.getBufferId());
+        soundMgr.addSoundSource("MUSIC", playerSoundSource);
     }
 
     @Override
@@ -296,6 +317,13 @@ public class Main implements IAppLogic {
         }
         if (window.isKeyClick(GLFW_KEY_P)){
             System.out.println("( " + camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z +")");
+        }
+        if (window.isKeyClick(GLFW_KEY_SPACE)){
+            if (playerSoundSource.isPlaying()){
+                playerSoundSource.pause();
+            }else {
+                playerSoundSource.play();
+            }
         }
 
     }
