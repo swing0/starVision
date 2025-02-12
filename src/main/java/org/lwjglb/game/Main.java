@@ -53,6 +53,9 @@ public class Main implements IAppLogic {
     private SoundSource playerSoundSource;
     private SoundManager soundMgr;
 
+    private ControlsUI controlsUI;
+
+
     public static void main(String[] args) {
         Main main = new Main();
         Window.WindowOptions opts = new Window.WindowOptions();
@@ -197,6 +200,8 @@ public class Main implements IAppLogic {
         camera.setPosition(-1.5f, 3.0f, 4.5f);
         camera.addRotation((float) Math.toRadians(15.0f), (float) Math.toRadians(390.f));
 
+//        controlsUI = new ControlsUI(scene);
+//        scene.setGuiInstance(controlsUI);
         lightAngle = 45.001f;
         timeSpeed = TIME_DEFAULT_SPEED;
         initSounds(bobEntity.getPosition(), camera);
@@ -281,12 +286,10 @@ public class Main implements IAppLogic {
         if (window.isKeyClick(GLFW_KEY_UP) && fogDensity<0.1f){
             fogDensity += 0.001f;
             scene.getFog().setDensity(fogDensity);;
-            System.out.println(scene.getFog().getDensity());
         }
         if (window.isKeyClick(GLFW_KEY_DOWN) && fogDensity>0.001f){
             fogDensity -= 0.001f;
             scene.getFog().setDensity(fogDensity);;
-            System.out.println(scene.getFog().getDensity());
         }
 
         MouseInput mouseInput = window.getMouseInput();
@@ -318,7 +321,7 @@ public class Main implements IAppLogic {
         if (window.isKeyClick(GLFW_KEY_P)){
             System.out.println("( " + camera.getPosition().x + ", " + camera.getPosition().y + ", " + camera.getPosition().z +")");
         }
-        if (window.isKeyClick(GLFW_KEY_SPACE)){
+        if (window.isKeyClick(GLFW_KEY_M)){
             if (playerSoundSource.isPlaying()){
                 playerSoundSource.pause();
             }else {
