@@ -26,8 +26,10 @@ public class Main implements IAppLogic {
     private Entity bobEntity; // 添加Bob实体引用
     private PointLight candleLight; // 村庄光源
     private PointLight snowLight; // 雪屋光源
+    private PointLight userLight; // 用户附近光源
     private SpotLight flashlight;
     private boolean isFlashlightOn = false;
+    private boolean isUserlightOn = false;
     private static final float FLASHLIGHT_INTENSITY = 15.0f;
     private static final float FLASHLIGHT_CUTOFF = 15.0f;
     private Entity villageHouseEntity;
@@ -167,6 +169,17 @@ public class Main implements IAppLogic {
                 0.045f,    // linear
                 0.0075f    // exponent
         ));
+        // 用户附近灯光
+        userLight = new PointLight(
+                new Vector3f(1.0f, 0.75f, 0.3f), // 橙黄色调
+                new Vector3f(0, 15, 0 ),
+                0f                             // 强度
+        );
+        userLight.setAttenuation(new PointLight.Attenuation(
+                1.0f,     // constant
+                0.045f,    // linear
+                0.0075f    // exponent
+        ));
         // 初始化手电筒光源
         PointLight flashLightPoint = new PointLight(
                 new Vector3f(0.9f, 0.9f, 1.0f), // 冷白色
@@ -184,6 +197,7 @@ public class Main implements IAppLogic {
         );
         scene.getSceneLights().getPointLights().add(candleLight);
         scene.getSceneLights().getPointLights().add(snowLight);
+        scene.getSceneLights().getPointLights().add(userLight);
         scene.getSceneLights().getSpotLights().add(flashlight);
 
         SkyBox skyBox = new SkyBox("resources/models/skybox/skybox.obj", scene.getTextureCache(),
@@ -302,6 +316,10 @@ public class Main implements IAppLogic {
             isFlashlightOn = !isFlashlightOn;
             flashlight.getPointLight().setIntensity(isFlashlightOn ? FLASHLIGHT_INTENSITY : 0.0f);
         }
+        if (window.isKeyClick(GLFW_KEY_G)) {
+            isUserlightOn = !isUserlightOn;
+            userLight.setIntensity(isUserlightOn ? FLASHLIGHT_INTENSITY : 0.0f);
+        }
         if (window.isKeyClick(GLFW_KEY_F1)){
             //村庄场景
             camera.setPosition(-1.5f,3.0f, 4.5f);
@@ -411,6 +429,7 @@ public class Main implements IAppLogic {
         // 设置手电筒位置（稍微在摄像机前方）
         Vector3f flashlightPos = cameraPos.add(cameraFront.mul(0.2f), new Vector3f());
         flashlight.getPointLight().setPosition(flashlightPos);
+        userLight.setPosition(cameraPos);
 
         // 设置手电筒方向
         flashlight.setConeDirection(cameraFront);
